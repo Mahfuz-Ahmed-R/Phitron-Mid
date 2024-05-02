@@ -1,3 +1,4 @@
+import os
 #1. Make a class named Star_Cinema which will have one class attribute named hall_list which is an empty list initially. Make a method named entry_hall() to insert an object of class Hall (Described below) inside its hall_list. 	
 
 class Star_Cinema:
@@ -30,15 +31,15 @@ class Hall:
     def entry_show(self, id, movie_name, time):
         show_details = (id, movie_name, time)
         self._show_list.append(show_details)
-        self._seats[id] = [['free'] * self._cols for _ in range(self._rows)]
+        self._seats[id] = [['0'] * self._cols for _ in range(self._rows)]
 
 #4. Make a method in Hall class named book_seats() which will take an id of the show and list of tuples where every tuple contains the row and col of the seat. You need to check the id of the show, and book the seats. 
     def book_seats(self, id, total_seats):
         if id in self._seats:
             for row, col in total_seats:
                 if  row <= self._rows and col <= self._cols:
-                    if self._seats[id][row - 1][col - 1] == 'free':
-                        self._seats[id][row - 1][col - 1] = 'booked'
+                    if self._seats[id][row - 1][col - 1] == '0':
+                        self._seats[id][row - 1][col - 1] = '*'
                         print(f"Congratulaitons, Seat ({row}, {col}) booked successfully!!!")
                     elif row >= 0 and col >= 0:
                         print(f"Sorry, Seat ({row}, {col}) is nowhere. :(")
@@ -67,7 +68,7 @@ class Hall:
 
 # Execution
 
-cinema = Star_Cinema(5, 10, 1)
+cinema = Star_Cinema(7, 7, 1)
 
 
 hall = cinema._hall_list[0]
@@ -76,9 +77,39 @@ hall.entry_show(2, "Avatar 2", "15:00")
 hall.entry_show(3, "Dune", "18:00")
 hall.entry_show(4, "Dune 2", "09:00")
 
+os.system('cls' if os.name == 'nt' else 'clear')
 
-hall.view_show_list()
-print("\n")
-hall.view_available_seats(1)
-print("\n")
-hall.book_seats(1, [(2, 5), (3, 7)])
+while True:
+    print("Choose any of the options from below: ")
+    print("1 : View the running shows")
+    print("2 : View the available seats")
+    print("3 : Book a ticket/tickets")
+    print("4 : Exit")
+    inputt = int(input("Enter the option: "))
+    if inputt == 1:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        hall.view_show_list()
+        print("----x------x------x----")
+        print("----x------x------x----")
+    elif inputt == 2:
+        id = int(input("Enter the show's ID: "))
+        os.system('cls' if os.name == 'nt' else 'clear')
+        hall.view_available_seats(id)
+        print("----x------x------x----")
+        print("----x------x------x----")
+    elif inputt == 3:
+        id = int(input("Enter the show's ID: "))
+        tic = int(input("Number of tickets: "))
+        seat_list = []
+        for i in range(tic):
+            print("Ticket no:", i+1)
+            r1 = int(input("Enter the row: "))
+            c1 = int(input("Enter the column: "))
+            seat_list.append((r1, c1))
+        
+        os.system('cls' if os.name == 'nt' else 'clear')
+        hall.book_seats(id, seat_list)
+        print("----x------x------x----")
+        print("----x------x------x----")
+    elif inputt == 4:
+        break
